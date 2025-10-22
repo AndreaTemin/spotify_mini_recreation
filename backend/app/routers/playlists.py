@@ -22,6 +22,26 @@ def create_playlist(
     """
     return crud.create_playlist(db=db, playlist=playlist, user_id=current_user.id)
 
+@router.get("/{playlist_id}", response_model=schemas.Playlist)
+def read_playlist(
+    playlist_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user)
+):
+    """
+    Get details for a specific playlist, including its tracks.
+    """
+    db_playlist = crud.get_playlist(db, playlist_id=playlist_id)
+    if not db_playlist:
+        raise HTTPException(status_code=404, detail="Playlist not found")
+    # Verify the current user owns this playlist
+    if db_playlist.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to access this playlist")
+
+    # The crud function returns the SQLAlchemy model, which FastAPI
+    # automatically converts using the schemas.Playlist response_model,
+    # including the eagerly loaded tracks.
+    return db_playlist
 
 @router.get("/", response_model=List[schemas.Playlist])
 def read_user_playlists(

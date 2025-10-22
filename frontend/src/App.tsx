@@ -6,6 +6,7 @@ import Layout from './components/Layout'; // Import the layout
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage'; // Import the real home page
+import PlaylistPage from './pages/PlaylistPage'; // <-- IMPORT
 
 function App() {
   return (
@@ -16,12 +17,10 @@ function App() {
 
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
-        <Route element={<Layout />}> {/* Wrap protected routes in the Layout */}
-          
+        <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/playlist/:id" element={<PlaylistPage />} /> {/* <-- ADD THIS ROUTE */}
           {/* <Route path="/track/:id" element={<TrackPage />} /> */}
-          {/* <Route path="/playlist/:id" element={<PlaylistPage />} /> */}
-        
         </Route>
       </Route>
       

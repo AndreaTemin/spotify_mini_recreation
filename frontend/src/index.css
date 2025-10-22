@@ -1,0 +1,173 @@
+/* frontend/src/index.css */
+
+/* --- Basic Reset & Body --- */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa; /* Lighter background */
+  color: #212529; /* Darker text */
+  line-height: 1.6;
+}
+
+/* --- Container & Layout --- */
+.layout {
+  max-width: 1100px;
+  margin: 0 auto; /* Center the layout */
+  background-color: #ffffff;
+  min-height: 100vh;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Vertically align items */
+  padding: 0.8rem 2rem;
+  background-color: #f1f3f5; /* Light grey nav */
+  border-bottom: 1px solid #dee2e6;
+}
+
+nav a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  margin-right: 1.5rem;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+nav span { /* User email */
+  color: #495057;
+  margin-right: 1rem;
+}
+
+main {
+  padding: 2rem;
+  display: flex;
+  gap: 2rem; /* Space between playlist and tracks */
+}
+
+/* --- Headings --- */
+h1, h2 {
+  color: #343a40;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+/* --- Buttons --- */
+button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background-color: #1DB954; /* Spotify green */
+  color: white;
+  border: none;
+  border-radius: 500px; /* Pill shape */
+  font-weight: bold;
+  margin-right: 0.5rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #1ED760; /* Lighter green */
+}
+
+nav button { /* Style logout button differently */
+    background-color: #6c757d;
+}
+nav button:hover {
+    background-color: #5a6268;
+}
+
+
+/* --- Forms --- */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  width: 100%; /* Make inputs fill container */
+  box-sizing: border-box; /* Include padding in width */
+}
+
+form {
+    margin-bottom: 1.5rem;
+}
+
+/* --- Playlist & Track Sections --- */
+.playlist-section {
+  flex: 1; /* Takes 1 part of the space */
+  border-right: 1px solid #e9ecef;
+  padding-right: 2rem;
+}
+
+.track-section {
+  flex: 2; /* Takes 2 parts of the space */
+}
+
+/* --- Playlist Styling --- */
+ul.playlist-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li.playlist-item {
+  background-color: transparent; /* Remove default background */
+  padding: 0.6rem 0;
+  margin-bottom: 0;
+  border: none;
+  border-bottom: 1px solid #f1f3f5; /* Light separator */
+  cursor: pointer;
+  transition: background-color 0.1s ease-in-out;
+}
+li.playlist-item:hover {
+    background-color: #f8f9fa;
+}
+
+
+/* --- Track Item Styling --- */
+.track-item {
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between; /* Push button to the right */
+  align-items: center; /* Vertically align content */
+}
+
+.track-item div { /* Container for title/artist/album */
+    flex-grow: 1;
+}
+
+
+.track-item strong {
+  display: block; /* Make title take full line */
+  font-size: 1.1em;
+  color: #212529;
+  margin-bottom: 0.25rem;
+}
+
+.track-item p {
+  font-size: 0.9em;
+  color: #6c757d; /* Grey text */
+  margin: 0;
+}
+
+.track-item button {
+    flex-shrink: 0; /* Prevent button from shrinking */
+    margin-left: 1rem; /* Space between text and button */
+}
+
+/* --- Utility for empty states --- */
+.empty-state {
+    color: #6c757d;
+    font-style: italic;
+}

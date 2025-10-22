@@ -1,63 +1,55 @@
 import { useEffect, useState, useRef } from 'react';
+import { Link } from 'react-router-dom'; // Import Link
 import api from '../api/axios';
+import PlaylistSelector from '../components/PlaylistSelector'; // Import the selector
 
-// --- Types (no change) ---
-interface Artist {
-  name: string;
-}
-interface Album {
-  title: string;
-}
-interface Track {
-  id: number;
-  title: string;
-  artist: Artist;
-  album: Album;
-  preview_url: string;
-}
-interface Playlist {
-  id: number;
-  name: string;
-}
+// --- Types ---
+interface Artist { name: string; }
+interface Album { title: string; }
+interface Track { id: number; title: string; artist: Artist; album: Album; preview_url: string; }
+interface Playlist { id: number; name: string; }
 
 const HomePage = () => {
-  const [allTracks, setAllTracks] = useState<Track[]>([]); // Renamed from 'tracks'
+  const [allTracks, setAllTracks] = useState<Track[]>([]);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
-  // --- NEW: Search State ---
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Track[]>([]);
-
-  // --- Audio player state (no change) ---
   const [currentPreviewUrl, setCurrentPreviewUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [newPlaylistName, setNewPlaylistName] = useState('');
+  const [playlistError, setPlaylistError] = useState('');
 
+
+  // --- Fetch Initial Data ---
   useEffect(() => {
-    // This function now only fetches the initial data
     const fetchInitialData = async () => {
+      console.log("Starting fetchInitialData...");
       setLoading(true);
       setError('');
       try {
+        console.log("Inside try block, before API calls...");
         const [tracksResponse, playlistsResponse] = await Promise.all([
           api.get('/tracks/'),
           api.get('/playlists/')
         ]);
+        console.log("API calls successful:", tracksResponse.data, playlistsResponse.data);
         setAllTracks(tracksResponse.data);
         setPlaylists(playlistsResponse.data);
       } catch (err) {
+        console.error("Error in fetchInitialData:", err);
         setError('Failed to fetch data.');
-        console.error(err);
       } finally {
+        console.log("Inside finally block...");
         setLoading(false);
       }
     };
     fetchInitialData();
   }, []);
 
-  // --- Audio playback effect (no change) ---
+  // --- Audio Playback Effect ---
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying && currentPreviewUrl) {
@@ -71,7 +63,7 @@ const HomePage = () => {
     }
   }, [isPlaying, currentPreviewUrl]);
 
-  // --- togglePlay function (no change) ---
+  // --- togglePlay function ---
   const togglePlay = (previewUrl: string) => {
     if (currentPreviewUrl === previewUrl) {
       setIsPlaying(!isPlaying);
@@ -81,11 +73,11 @@ const HomePage = () => {
     }
   };
 
-  // --- NEW: Search handler ---
+  // --- handleSearch function ---
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim().length < 3) {
-      setSearchResults([]); // Clear results if query is too short
+      setSearchResults([]);
       return;
     }
     try {
@@ -98,32 +90,84 @@ const HomePage = () => {
     }
   };
 
+  // --- handleCreatePlaylist function ---
+  const handleCreatePlaylist = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPlaylistError('');
+    if (!newPlaylistName.trim()) {
+      setPlaylistError('Playlist name cannot be empty.');
+      return;
+    }
+    try {
+      const response = await api.post('/playlists/', { name: newPlaylistName });
+      setPlaylists([...playlists, response.data]);
+      setNewPlaylistName('');
+    } catch (err) {
+      setPlaylistError('Failed to create playlist.');
+      console.error('Create playlist error:', err);
+    }
+  };
+
+  // --- handleAddTrackToPlaylist function ---
+  const handleAddTrackToPlaylist = async (playlistId: number, trackId: number) => {
+    console.log(`Attempting to add track ${trackId} to playlist ${playlistId}`);
+
+    try {
+      const response = await api.post(`/playlists/${playlistId}/tracks/${trackId}`);
+      console.log('Track added successfully to playlist:', response.data);
+      const playlistName = playlists.find(p => p.id === playlistId)?.name || 'the playlist';
+      alert(`Track added to "${playlistName}"!`);
+      // NOTE: Still not visually updating the playlist state here.
+    } catch (err) {
+      console.error('Failed to add track to playlist:', err);
+      alert('Failed to add track.');
+      // Re-throw error for the selector component
+      throw err;
+    }
+  };
+
+
+  // --- Render Logic ---
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
-  // --- NEW: Logic to decide which tracks to display ---
   const tracksToDisplay = searchQuery.trim().length > 0 ? searchResults : allTracks;
 
   return (
-    <div style={{ display: 'flex', gap: '2rem' }}>
+    <> {/* Use fragment */}
       <audio ref={audioRef} />
 
-      {/* --- Playlist section (no change) --- */}
-      <div style={{ flex: 1 }}>
+      {/* --- Playlist section --- */}
+      <div className="playlist-section">
         <h2>My Playlists</h2>
+        <form onSubmit={handleCreatePlaylist} style={{ marginBottom: '1rem' }}>
+          <input
+            type="text"
+            placeholder="New playlist name..."
+            value={newPlaylistName}
+            onChange={(e) => setNewPlaylistName(e.target.value)}
+          />
+          <button type="submit" style={{ marginLeft: '0.5rem' }}>Create</button>
+          {playlistError && <p style={{ color: 'red', fontSize: '0.9em', marginTop: '0.25rem' }}>{playlistError}</p>}
+        </form>
         {playlists.length > 0 ? (
-          <ul>
+          <ul className="playlist-list">
             {playlists.map(playlist => (
-              <li key={playlist.id}>{playlist.name}</li>
+              <li key={playlist.id} className="playlist-item">
+                {/* Wrap name in Link */}
+                <Link to={`/playlist/${playlist.id}`}>
+                  {playlist.name}
+                </Link>
+              </li>
             ))}
           </ul>
         ) : (
-          <p>You haven't created any playlists yet.</p>
+          <p className="empty-state">You haven't created any playlists yet.</p>
         )}
       </div>
 
-      <div style={{ flex: 2 }}>
-        {/* --- NEW: Search Form --- */}
+      {/* --- Track section --- */}
+      <div className="track-section">
         <h2>All Tracks</h2>
         <form onSubmit={handleSearch}>
           <input
@@ -131,30 +175,38 @@ const HomePage = () => {
             placeholder="Search by track or artist..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ width: '300px', padding: '0.5rem' }}
           />
-          <button type="submit" style={{ marginLeft: '0.5rem' }}>Search</button>
+          <button type="submit">Search</button>
         </form>
 
-        {/* --- UPDATED: Track List --- */}
         {tracksToDisplay.map(track => {
           const isCurrentTrack = currentPreviewUrl === track.preview_url;
           return (
-            <div key={track.id} style={{ border: '1px solid #eee', padding: '0.5rem', marginBottom: '0.5rem', marginTop: '1rem' }}>
-              <strong>{track.title}</strong>
-              <p>{track.artist.name} - {track.album.title}</p>
-              <button onClick={() => togglePlay(track.preview_url)}>
-                {isCurrentTrack && isPlaying ? 'Pause' : 'Play'}
-              </button>
+            <div key={track.id} className="track-item">
+              <div>
+                <strong>{track.title}</strong>
+                <p>{track.artist.name} - {track.album.title}</p>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}> {/* Container */}
+                <button onClick={() => togglePlay(track.preview_url)}>
+                  {isCurrentTrack && isPlaying ? 'Pause' : 'Play'}
+                </button>
+                {/* --- USE PlaylistSelector --- */}
+                <PlaylistSelector
+                    playlists={playlists}
+                    trackId={track.id}
+                    onAddToPlaylist={handleAddTrackToPlaylist}
+                />
+              </div>
             </div>
           );
-        })}
-        {/* Show a message if search yields no results */}
+        })} {/* Closing parenthesis and brace for map */}
+
         {searchQuery.length > 0 && tracksToDisplay.length === 0 && (
-          <p>No results found for "{searchQuery}".</p>
+          <p className="empty-state">No results found for "{searchQuery}".</p>
         )}
       </div>
-    </div>
+    </>
   );
 };
 
