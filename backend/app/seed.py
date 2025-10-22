@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 from sqlalchemy.orm import Session
-from app import crud, schemas
+from app import crud, schemas, models
 
 DATA_FILE = Path(__file__).parent.parent / "data/tracks.json"
 

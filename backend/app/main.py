@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy.orm import Session
+
 from app.database import engine
 from app import models
 from app.routers import auth, tracks, playlists # Import the new routers
