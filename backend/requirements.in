@@ -24,3 +24,4 @@ pydantic-settings
 # other requirements
 email-validator 
 pydantic
+python-multipart

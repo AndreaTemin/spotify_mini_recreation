@@ -60,7 +60,7 @@ class TokenData(BaseModel):
 # from our SQLAlchemy models. `orm_mode = True` is the magic.
 
 class Config:
-    orm_mode = True
+    from_attributes = True 
 
 # Artist Response
 class Artist(ArtistBase):
