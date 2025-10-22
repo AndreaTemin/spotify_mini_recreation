@@ -1,0 +1,12 @@
+{
+  "tracks": [
+  {
+    "title": "Bohemian Rhapsody",
+    "artist_name": "Queen",
+    "album_name": "A Night at the Opera",
+    "duration": 354,
+    "preview_url": "/assets/audio/bohemian_rhapsody_preview.mp3"
+  }
+ 
+    ]
+}

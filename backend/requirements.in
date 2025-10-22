@@ -1,0 +1,26 @@
+# The web framework
+fastapi
+
+# The ASGI server
+uvicorn[standard]
+
+# The ORM and Postgres driver
+sqlalchemy
+# psycopg2-binary  # Modern, fast Postgres driver
+psycopg[binary]  # <-- FIX THIS LINE  # Modern, fast Postgres driver
+
+# Database migrations
+alembic
+
+# JWT for authentication
+python-jose[cryptography]
+
+# Password hashing
+passlib[bcrypt]
+
+# For loading settings (like DATABASE_URL)
+pydantic-settings
+
+# other requirements
+email-validator 
+pydantic

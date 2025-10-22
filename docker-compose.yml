@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # 1. Database Service (PostgreSQL)
+  db:
+    image: postgres:15-alpine # Use a lightweight image
+    container_name: spotify_db
+    environment:
+      # Define credentials for your database
+      - POSTGRES_USER=spotify
+      - POSTGRES_PASSWORD=spotify
+      - POSTGRES_DB=spotify_db
+    ports:
+      # Expose the DB port to your host machine (optional, but good for debugging)
+      - '5432:5432'
+    volumes:
+      # Persist database data even when the container stops
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - spotify_net
+
+  # 2. Backend Service (FastAPI)
+  backend:
+    build: ./backend # Tell Docker Compose to build from the ./backend/Dockerfile
+    container_name: spotify_backend
+    ports:
+      - '8000:8000' # Expose the API port
+    environment:
+      # Pass the DB credentials to the backend application
+      - DATABASE_URL=postgresql+psycopg://spotify:spotify@db:5432/spotify_db   
+    volumes:
+      # Mount the backend code directory into the container
+      # This enables hot-reloading: changes on your host machine
+      # are reflected inside the container instantly.
+      - ./backend:/app
+      - backend_venv:/app/.venv
+    networks:
+      - spotify_net
+    depends_on:
+      - db # Tell this service to wait until the 'db' service is healthy
+    command: >
+      sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+  # 3. Frontend Service (React)
+  frontend:
+    build: ./frontend # Build from the ./frontend/Dockerfile
+    container_name: spotify_frontend
+    ports:
+      - '5173:5173' # Expose the Vite dev server port
+    volumes:
+      # Mount the frontend code for hot-reloading
+      - ./frontend:/app
+      # Mount node_modules as a separate volume for performance
+      - /app/node_modules
+    networks:
+      - spotify_net
+    depends_on:
+      - backend # Frontend needs the backend to be running
+
+# Define the network for services to communicate
+networks:
+  spotify_net:
+    driver: bridge
+
+# Define the persistent volume for the database
+volumes:
+  postgres_data:
+  backend_venv:

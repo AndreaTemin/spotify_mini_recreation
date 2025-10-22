@@ -1,0 +1,26 @@
+# Start from a slim Python 3.11 image
+FROM python:3.11-slim
+
+# 1. Install uv
+RUN pip install uv
+
+# 2. Set up the app directory and virtual env
+WORKDIR /app
+RUN uv venv .venv
+# Activate the venv for all subsequent RUN/CMD commands
+ENV PATH="/app/.venv/bin:$PATH"
+
+# 3. Install dependencies
+# Copy *only* the requirements file first to leverage Docker's layer cache.
+# This step will only re-run if requirements.in changes.
+COPY requirements.in .
+RUN uv pip install --no-cache -r requirements.in
+
+# 4. Copy the rest of the application code
+# This will be overridden by the volume mount in dev,
+# but it's needed for a standalone/production build.
+COPY . .
+
+# 5. The "production" command to run the app
+# (This will be overridden by docker-compose in our dev setup)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

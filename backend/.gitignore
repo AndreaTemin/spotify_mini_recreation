@@ -1,0 +1,7 @@
+# gitignore
+.dockerignore
+Ignore IDE and OS files
+.idea/
+.vscode/
+*.pyc
+__pycache__/
