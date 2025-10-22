@@ -5,12 +5,26 @@ from app.database import get_db
 from app.database import engine
 from app import models
 from app.routers import auth, tracks, playlists # Import the new routers
+from fastapi.middleware.cors import CORSMiddleware  # <-- 1. IMPORT THIS
 
 # This command tells SQLAlchemy to create all tables
 # based on the models we defined.
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Spotify-ish Mini App")
+origins = [
+    "http://localhost:5173",  # Your React app's origin
+    "http://127.0.0.1:5173", # Just in case
+    "http://localhost",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Include the routers
 app.include_router(auth.router, tags=["Auth"])

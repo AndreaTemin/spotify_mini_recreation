@@ -1,9 +1,22 @@
-# We'll use a Node image for our React app later.
-# This is just a placeholder to make the build pass.
-FROM node:18-alpine
+# Use the official Node 18 image
+FROM node:20-alpine
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# A command to keep the container running in dev
-CMD ["tail", "-f", "/dev/null"]
+# Copy the package.json and package-lock.json first
+# This leverages Docker's layer cache.
+COPY package*.json ./
+
+# Install dependencies inside the container
+# This will be stored in the /app/node_modules volume
+RUN npm install
+
+# Copy the rest of your frontend code
+COPY . .
+
+# Expose the Vite port
+EXPOSE 5173
+
+# The command to run your development server
+CMD ["npm", "run", "dev"]

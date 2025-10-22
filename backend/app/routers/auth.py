@@ -19,7 +19,12 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered",
         )
-    return crud.create_user(db=db, user=user)
+    
+    # 1. ADD THE HASHING LOGIC HERE
+    hashed_password = auth.get_password_hash(user.password)
+    
+    # 2. PASS THE HASHED PASSWORD TO THE NEW FUNCTION
+    return crud.create_user(db=db, user=user, hashed_password=hashed_password)
 
 
 @router.post("/token", response_model=schemas.Token)
