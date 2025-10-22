@@ -1,12 +1,11 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
+import Layout from './components/Layout'; // Import the layout
 
-// Import our new pages
+// Import our pages
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-
-// Placeholder for the main app page
-const HomePage = () => <h1>Home Page (Protected)</h1>;
+import HomePage from './pages/HomePage'; // Import the real home page
 
 function App() {
   return (
@@ -17,10 +16,13 @@ function App() {
 
       {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
-        {/* All routes inside here are protected */}
-        <Route path="/" element={<HomePage />} />
-        {/* <Route path="/track/:id" element={<TrackPage />} /> */}
-        {/* <Route path="/playlist/:id" element={<PlaylistPage />} /> */}
+        <Route element={<Layout />}> {/* Wrap protected routes in the Layout */}
+          
+          <Route path="/" element={<HomePage />} />
+          {/* <Route path="/track/:id" element={<TrackPage />} /> */}
+          {/* <Route path="/playlist/:id" element={<PlaylistPage />} /> */}
+        
+        </Route>
       </Route>
       
       {/* Fallback route */}

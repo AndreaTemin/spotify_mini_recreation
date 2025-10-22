@@ -18,6 +18,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - spotify_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U spotify -d spotify_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # 2. Backend Service (FastAPI)
   backend:
@@ -37,7 +42,8 @@ services:
     networks:
       - spotify_net
     depends_on:
-      - db # Tell this service to wait until the 'db' service is healthy
+      db:
+        condition: service_healthy # Wait for the healthchec
     command: >
       sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
   # 3. Frontend Service (React)

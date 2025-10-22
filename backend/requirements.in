@@ -16,7 +16,8 @@ alembic
 python-jose[cryptography]
 
 # Password hashing
-passlib[bcrypt]
+passlib==1.7.4
+bcrypt==3.2.0
 
 # For loading settings (like DATABASE_URL)
 pydantic-settings
