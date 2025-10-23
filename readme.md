@@ -4,16 +4,16 @@ This project is a small-scale clone of Spotify built as a take-home assignment. 
 
 ## Goal
 
-The primary goal was to build a functional web application with a React frontend and a Python backend, demonstrating full-stack development skills within a containerized environment, based on the requirements provided in `spotify_mini_app_take_home_docker_react_fast_api(1).md[1].pdf`.pdf].
+The primary goal was to build a functional web application with a React frontend and a Python backend, demonstrating full-stack development skills within a containerized environment, based on the requirements provided in `spotify_mini_app_take_home_docker_react_fast_api(1).md[1].pdf`.
 
 ## Tech Stack
 
-* **Frontend:** React (Vite) with TypeScript.pdf]
-* **Backend:** Python with FastAPI.pdf]
+* **Frontend:** React (Vite) with TypeScript
+* **Backend:** Python with FastAPI
 * **Database:** PostgreSQL
-* **API:** RESTful JSON API.pdf]
-* **Authentication:** JWT (JSON Web Tokens) managed via HTTP Headers (`Authorization: Bearer <token>`).pdf]
-* **Containerization:** Docker & Docker Compose.pdf]
+* **API:** RESTful JSON API
+* **Authentication:** JWT (JSON Web Tokens) managed via HTTP Headers (`Authorization: Bearer <token>`)
+* **Containerization:** Docker & Docker Compose
 * **Backend Package Management:** `uv`
 * **ORM:** SQLAlchemy (with `psycopg` for Postgres connection)
 * **Schema Validation:** Pydantic
@@ -39,7 +39,7 @@ The primary goal was to build a functional web application with a React frontend
     * View the contents of a specific playlist (`GET /playlists/{playlist_id}`) on a dedicated page (`/playlist/:id`). Playlist names on the home page link to this view.
     * Remove tracks from a playlist (`DELETE /playlists/{playlist_id}/tracks/{track_id}`) using a button on the playlist detail page (with optimistic UI update).
 * **Audio Preview:**
-    * Play/Pause 30-second audio previews for tracks using the browser's native `<audio>` element, controlled via buttons on the home page. Audio files are served from `frontend/public/assets/audio/`.pdf].
+    * Play/Pause 30-second audio previews for tracks using the browser's native `<audio>` element, controlled via buttons on the home page. Audio files are served from `frontend/public/assets/audio/`.
 * **Database Seeding:**
     * Initial track data is loaded from `backend/data/tracks.json`.pdf, andreatemin/spotify_mini_recreation/AndreaTemin-spotify_mini_recreation-5e8587d14f1408cffe9730827a770ce225d1588a/backend/app/seed.py].
     * A `POST /seed-db` backend endpoint allows populating the database with sample tracks, artists, and albums, avoiding duplicates.
@@ -127,7 +127,7 @@ ReDoc: http://localhost:8000/redoc
 These interfaces allow you to explore all available endpoints, view their expected request/response schemas, and even send test requests directly to the API.
 
 Potential Next Steps & Improvements
-Based on the original requirements.pdf], future improvements could include:
+Based on the original requirements, future improvements could include:
 
 Playlist CRUD: Implement renaming (PUT /playlists/{playlist_id}) and deleting playlists (DELETE /playlists/{playlist_id}) (requires backend endpoints and frontend UI).
 
