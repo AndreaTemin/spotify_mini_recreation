@@ -41,7 +41,7 @@ The primary goal was to build a functional web application with a React frontend
 * **Audio Preview:**
     * Play/Pause 30-second audio previews for tracks using the browser's native `<audio>` element, controlled via buttons on the home page. Audio files are served from `frontend/public/assets/audio/`.
 * **Database Seeding:**
-    * Initial track data is loaded from `backend/data/tracks.json`.pdf, andreatemin/spotify_mini_recreation/AndreaTemin-spotify_mini_recreation-5e8587d14f1408cffe9730827a770ce225d1588a/backend/app/seed.py].
+    * Initial track data is loaded from `backend/data/tracks.json`.pdf, andreatemin/spotify_mini_recreation/AndreaTemin-spotify_mini_recreation-5e8587d14f1408cffe9730827a770ce225d1588a/backend/app/seed.py.
     * A `POST /seed-db` backend endpoint allows populating the database with sample tracks, artists, and albums, avoiding duplicates.
 * **API Documentation:**
     * Automatic OpenAPI (Swagger UI) documentation available at `/docs`.
