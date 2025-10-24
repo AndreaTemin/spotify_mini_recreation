@@ -61,7 +61,7 @@ The primary goal was to build a functional web application with a React frontend
 
 1.  **Clone the repository:**
     ```bash
-    git clone <your-repository-url>
+    git clone https://github.com/AndreaTemin/spotify_mini_recreation
     cd spotify_project
     ```
 
