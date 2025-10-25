@@ -62,7 +62,7 @@ The primary goal was to build a functional web application with a React frontend
 1.  **Clone the repository:**
     ```bash
     git clone https://github.com/AndreaTemin/spotify_mini_recreation
-    cd spotify_project
+    cd spotify_mini_recreation
     ```
 
 2.  **Build and Run with Docker Compose:**
