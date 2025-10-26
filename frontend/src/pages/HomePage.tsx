@@ -15,7 +15,6 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<Track[]>([]);
   const [currentPreviewUrl, setCurrentPreviewUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -75,19 +74,8 @@ const HomePage = () => {
 
   // --- handleSearch function ---
   const handleSearch = async (e: React.FormEvent) => {
+    // Prevent the form from reloading the page
     e.preventDefault();
-    if (searchQuery.trim().length < 3) {
-      setSearchResults([]);
-      return;
-    }
-    try {
-      const response = await api.get('/tracks/search', {
-        params: { q: searchQuery }
-      });
-      setSearchResults(response.data);
-    } catch (err) {
-      console.error('Search failed:', err);
-    }
   };
 
   // --- handleCreatePlaylist function ---
@@ -131,7 +119,12 @@ const HomePage = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
-  const tracksToDisplay = searchQuery.trim().length > 0 ? searchResults : allTracks;
+  // Filter tracks based on the search query for a live search experience
+  const tracksToDisplay = allTracks.filter(track =>
+    track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    track.artist.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
 
   return (
     <> {/* Use fragment */}
