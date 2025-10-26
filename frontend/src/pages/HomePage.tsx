@@ -169,7 +169,6 @@ const HomePage = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <button type="submit">Search</button>
         </form>
 
         {tracksToDisplay.map(track => {

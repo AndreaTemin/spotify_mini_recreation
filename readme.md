@@ -32,6 +32,7 @@ The primary goal was to build a functional web application with a React frontend
     * Display a list of all available tracks (`/tracks/`) with artist and album information on the home page.
 * **Track Search:**
     * Search tracks by title or artist name (`/tracks/search?q=...`) via a search bar on the home page (case-insensitive backend search).
+    * The search bar provides a live, as-you-type filtering experience on the frontend.
 * **Playlist Management:**
     * Create new playlists (`POST /playlists/`) via a form on the home page.
     * View all playlists belonging to the logged-in user (`GET /playlists/`) on the home page.
@@ -98,6 +99,7 @@ The primary goal was to build a functional web application with a React frontend
     * See your playlists on the left.
     * See all available tracks on the right.
     * Use the search bar to filter tracks by title or artist (press Enter or click Search).
+    * Use the search bar to instantly filter tracks by title or artist as you type.
     * Click "Play" / "Pause" to listen to the 30-second preview.
     * Create a new playlist using the form on the left.
     * Add a track to one of your playlists using the dropdown selector next to the track.
@@ -132,6 +134,7 @@ Based on the original requirements, future improvements could include:
 Playlist CRUD: Implement renaming (PUT /playlists/{playlist_id}) and deleting playlists (DELETE /playlists/{playlist_id}) (requires backend endpoints and frontend UI).
 
 Track Details: Create a dedicated page (/track/:id) accessible by clicking a track title, potentially using GET /tracks/{track_id}.
+Track Details: Create a dedicated page (`/track/:id`) accessible by clicking a track title, potentially using `GET /tracks/{track_id}`.
 
 Search UX: Implement debouncing or live search instead of requiring button click/Enter.
 
